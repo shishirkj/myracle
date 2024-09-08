@@ -75,49 +75,84 @@ const generateImageCaption = async (imageData) => {
 const generateTestInstructions = async (captions, context = "") => {
   // Multi-shot prompt with detailed examples based on Red Bus features
   const multiShotExamples = `
-Example 1:
-Feature: Route Selection (Bangalore to Chennai)
-Test Case 1:
-  - Pre-condition: User is on the travel booking home screen.
-  - Steps:
-    1. Open the app.
-    2. Enter "Bangalore" in the "From" field.
-    3. Enter "Chennai" in the "To" field.
-    4. Select the travel date (e.g., 10th September).
-    5. Click the "Search" button.
-  - Expected: The app should display available bus/train/flight options from Bangalore to Chennai on the selected date.
 
-Example 2:
-Feature: Bus Selection for Bangalore to Chennai Route
-Test Case 2:
-  - Pre-condition: User has searched for buses from Bangalore to Chennai.
-  - Steps:
-    1. From the search results, select a bus operator.
-    2. Choose a bus based on timing or fare.
-    3. Select the desired seat on the seat map.
-    4. Click "Proceed" to continue with the booking.
-  - Expected: The app should display selected bus details, including timing, fare, and seat number, and allow the user to proceed with the booking.
+  Example 1:
+  Feature: Source, Destination, and Date Selection
+  Test Case 1:
+    - Pre-conditions: The user is on the home screen of the Red Bus mobile app.
+    - Step-by-step instructions:
+      1. Open the Red Bus app on your mobile device.
+      2. On the home screen, tap on the "From" field and enter the source location.
+      3. Tap on the "To" field and enter the destination location.
+      4. Tap on the "Date" field and select the travel date.
+      5. Confirm the source, destination, and date selections.
+    - Expected result: The app should correctly display the selected source, destination, and date, and allow the user to proceed to the bus selection screen.
 
-Example 3:
-Feature: Booking Confirmation for Bangalore to Chennai Route
-Test Case 3:
-  - Pre-condition: User has selected a bus and seat for the Bangalore to Chennai route.
-  - Steps:
-    1. Confirm the selected bus and seat details.
-    2. Enter passenger details (e.g., name, age, etc.).
-    3. Choose a payment method and complete the transaction.
-    4. Click "Confirm Booking".
-  - Expected: The app should confirm the booking and show a booking reference number along with travel details.
+  Example 2:
+  Feature: Bus Selection
+  Test Case 2:
+    - Pre-conditions: The user has selected source, destination, and travel date.
+    - Step-by-step instructions:
+      1. After selecting the source, destination, and date, the user is directed to the bus selection screen.
+      2. Scroll through the list of available buses.
+      3. Select a bus by tapping on the bus name or details.
+    - Expected result: The app should display a list of available buses for the selected route and allow the user to view details and select a specific bus.
 
-Example 4:
-Feature: Bus Availability Notification for Bangalore to Chennai Route
-Test Case 4:
-  - Pre-condition: User has searched for buses from Bangalore to Chennai, and no buses are available.
-  - Steps:
-    1. Search for buses for the selected date (e.g., 10th September).
-  - Expected: The app should display a message notifying the user that no buses are available for the selected route and offer alternative dates or routes.
+  Example 3:
+  Feature: Seat Selection
+  Test Case 3:
+    - Pre-conditions: The user has selected a bus from the available list.
+    - Step-by-step instructions:
+      1. After selecting a bus, navigate to the seat selection screen.
+      2. View the seat map and select an available seat by tapping on it.
+      3. Confirm the seat selection.
+    - Expected result: The app should allow the user to select an available seat and confirm the selection, with the selected seat visually highlighted.
 
-`;
+  Example 4:
+  Feature: Pick-up and Drop-off Point Selection
+  Test Case 4:
+    - Pre-conditions: The user has selected a seat on the bus.
+    - Step-by-step instructions:
+      1. After selecting a seat, proceed to the pick-up and drop-off point selection screen.
+      2. Choose a pick-up point from the available options.
+      3. Choose a drop-off point from the available options.
+      4. Confirm the pick-up and drop-off points.
+    - Expected result: The app should allow the user to select valid pick-up and drop-off points and confirm the selection.
+
+  Example 5:
+  Feature: Offers and Promotions
+  Test Case 5:
+    - Pre-conditions: The user has navigated to the payment screen.
+    - Step-by-step instructions:
+      1. After selecting the pick-up and drop-off points, proceed to the payment screen.
+      2. Look for available offers or discounts on the payment screen.
+      3. Apply any valid offers by entering the promo code or selecting an available offer.
+    - Expected result: The app should display applicable offers and allow the user to apply them successfully.
+
+  Example 6:
+  Feature: Filters for Bus Selection
+  Test Case 6:
+    - Pre-conditions: The user is on the bus selection screen.
+    - Step-by-step instructions:
+      1. On the bus selection screen, locate the filter options (e.g., time, price, amenities).
+      2. Apply a filter (e.g., filter buses by time or price).
+      3. Confirm that the list of buses updates based on the selected filter.
+    - Expected result: The app should update the list of available buses according to the selected filters.
+
+  Example 7:
+  Feature: Bus Information
+  Test Case 7:
+    - Pre-conditions: The user is viewing a specific bus on the bus selection screen.
+    - Step-by-step instructions:
+      1. Select a bus from the available list.
+      2. Tap on the "Bus Information" section to view details about the bus.
+      3. Check for bus amenities, photos, and user reviews.
+    - Expected result: The app should display detailed information about the selected bus, including amenities, photos, and user reviews.
+  
+  Captions: ${captions.join("\n")}
+  Context: ${context || "No additional context."}
+
+  Provide the test cases below:`;
   const response = await axios.post(
     "https://api-inference.huggingface.co/models/openai-community/gpt2",
     { inputs: multiShotExamples },
