@@ -7,6 +7,8 @@ NEXTJS
 
 ## BACKEND
 NODEJS
+### env required
+hugging face api access_key
 
 
 ## results
